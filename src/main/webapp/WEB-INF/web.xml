@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-	
+
 	<!-- Spring in Practice informational metadata -->
 	<context-param>
 		<param-name>recipe</param-name>
-		<param-value>7.1</param-value>
+		<param-value>7.2</param-value>
 	</context-param>
 	<context-param>
 		<param-name>appName</param-name>
@@ -16,29 +16,8 @@
 	<context-param>
 		<param-name>aboutThisRecipe</param-name>
 		<param-value><![CDATA[
-<p>Recipe 7.1 shows how to authorize method calls based on user authentication
-level and roles. We adopt a paranoid "deny all" whitelisting approach that denies
-all access unless explicitly granted. See the type-level <code>@PreAuthorize("denyAll")</code>
-annotation we've added to the two service implementation beans.</p>
-
-<p>To see this in action, try logging in as <code>elvira</code>, and go to one
-of the forums she moderates. Select a message and try to block it. The app will
-not allow it, responding with a generic error message. (The error message is
-generic because eventually we won't even show the unauthorized actions, and so
-there's no need for a descriptive error message.) Because we don't yet have the
-ability to permit or deny actions based upon the principal's relationship to the
-forum and/or message, we're simply locking sensitive actions down.</p>
-
-<p>Note that user <code>juan</code> can perform administrative actions (like
-blocking and deleting messages) since his authorization is based on his admin
-role rather than on an ACL.</p>
-
-<p>The forum list on the home page is now empty for unauthenticated users. This
-is because we've added logic to suppress loading the forum list when the principal
-is unauthorized. We've done this because getting the forum list now requires
-authentiation, and here we don't want to force a login every time an unauthenticated
-user hits the home page.</p>
-
+<p>In recipe 7.2 we displays page content based on authentication level and role. Only authenticated users can see the
+"My Account" link, for example, and only juan can see the block/unblock and delete links.</p>
 <p>You can use any of the following usernames to log in. The password in each case is <code>p@ssword</code>.</p>
 <ul>
 <li><code>juan</code> (user, admin)</li>
@@ -49,7 +28,7 @@ user hits the home page.</p>
 </ul>
 		]]></param-value>
 	</context-param>
-	
+
 	<!-- Configuration -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -63,7 +42,7 @@ user hits the home page.</p>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
+
 	<filter>
 		<filter-name>sitemesh</filter-name>
 		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
@@ -76,38 +55,38 @@ user hits the home page.</p>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-	
+
 	<!-- Allows us to show the username in the page template. This establishes the SecurityContext and places the
 	     authentication object on it, but doesn't apply any access controls, force a redirect or anything like that. -->
 	<filter>
 		<filter-name>specialFilterChainProxy</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-	
+
 	<!-- This comes before Spring Security so we can see PUTs and DELETEs from Spring Security. -->
 	<filter-mapping>
 		<filter-name>httpMethodFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- Allows us to show the username in the page template. -->
 	<filter-mapping>
 		<filter-name>specialFilterChainProxy</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- Put this before Spring Security to style the login and access denied pages. -->
 	<!-- But we have to take special steps to ensure that we can access authentication info from pageTemplate.jsp. -->
 	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<servlet>
 		<servlet-name>spring</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -118,7 +97,7 @@ user hits the home page.</p>
 			</param-value>
 		</init-param>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>spring</servlet-name>
 		<url-pattern>/</url-pattern>
